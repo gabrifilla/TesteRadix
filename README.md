@@ -30,7 +30,7 @@
 - Autenticação e autorização, tanto de login quanto de envio das informações através do equipamento.
 
 ## Pré-requisitos
-:warning: [Python](https://www.python.org/downloads/release/python-3124/)
+:warning: [Python 3.12.4](https://www.python.org/downloads/release/python-3124/)
 
 ## Configuração
 
