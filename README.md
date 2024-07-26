@@ -1,23 +1,32 @@
 # API Sensor Data
 
-## Configuração
+### Tópicos 
 
-1. Clone o repositório
-2. Navegue até a pasta do repositório clonado
-3. Rode o comando `docker compose up -d --build`
-4. Acesse a API em `http://localhost:5000`
+:small_blue_diamond: [Descrição do projeto](#descrição-do-projeto)
 
-Ao fazer a inicialização do projeto, conta padrão de acesso será criada:
+:small_blue_diamond: [Funcionalidades](#funcionalidades)
 
-username: admin
-senha: admin
+:small_blue_diamond: [Endpoints](#endpoints)
 
-e
+:small_blue_diamond: [Pré-requisitos](#pré-requisitos)
 
-username: user
-senha: user
+:small_blue_diamond: [Como rodar a aplicação](#configuração)
 
-*Necessário fazer login para entrar na dashboard, onde o gráfico fica.* *
+:small_blue_diamond: [Testes](#testes)
+
+:small_blue_diamond: [Outros](#outros)
+
+## Descrição do projeto
+
+<p align="justify">
+  Este projeto é uma aplicação para monitorar e armazenar dados de sensores em tempo real, utilizando Flask, SQLAlchemy e Bootstrap. A aplicação também permite o upload de arquivos CSV para inserir dados em massa e fornece uma interface de dashboard com gráficos para a visualização dos dados.
+</p>
+
+## Funcionalidades
+- Recebimento de dados de sensores via API.
+- Upload de dados via arquivos CSV.
+- Visualização de dados em uma dashboard.
+- Autenticação e autorização tanto de login quanto de envio das informações através do equipamento.
 
 ## Endpoints
 
@@ -43,6 +52,7 @@ Recebe as informações em tempo real.
   "timestamp": "2023-02-15T01:30:00.000-05:00",
   "value": 78.42
 }
+```
 
 ### `POST /upload_csv`
 Recebe o arquivo csv para preencher os dados.
@@ -50,6 +60,36 @@ Recebe o arquivo csv para preencher os dados.
 ### `GET /api/average/<period>`
 Recebe o arquivo csv para preencher os dados.
 
+## Pré-requisitos
+:warning: [Python](https://www.python.org/downloads/release/python-3124/)
+
+## Configuração
+
+1. No terminal, clone o repositório: 
+  ```
+  git clone https://github.com/gabrifilla/TesteRadix.git
+  ```
+2. Navegue até a pasta do repositório clonado
+  ```
+  cd ./TesteRadix
+  ```
+3. Rode o comando de inicialização
+  ```
+  docker compose up -d --build
+  ```
+4. Acesse a aplicação em `http://localhost:5000`
+
+Ao fazer a inicialização do projeto, conta padrão de acesso será criada:
+
+username: admin
+senha: admin
+
+e
+
+username: user
+senha: user
+
+*Necessário fazer login para entrar na dashboard, onde o gráfico fica.* *
 
 ## Testes
 Dentro do projeto instalei uma biblioteca chamada locust, que, pelo que eu entendi, manipula as requisições, podendo enviar mais de uma ao emsmo tempo, as vezs até várias por segundo.
