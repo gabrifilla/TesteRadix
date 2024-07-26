@@ -9,7 +9,7 @@ services:
       POSTGRES_DB: sensor_data
     ports:
       - "5433:5432"
-      
+
   web:
     build: .
     command: python app.py
@@ -19,3 +19,13 @@ services:
       - "5000:5000"
     depends_on:
       - db
+
+  locust:
+    build: .
+    command: locust -f locustfile.py --host=http://web:5000
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+    ports:
+      - "8089:8089"

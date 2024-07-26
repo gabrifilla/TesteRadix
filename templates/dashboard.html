@@ -1,42 +1,115 @@
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sensor Dashboard</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-</head>
-<body>
-    <div>
-        <select id="time-period">
-            <option value="24h">Last 24 Hours</option>
-            <option value="48h">Last 48 Hours</option>
-            <option value="1w">Last Week</option>
-            <option value="1m">Last Month</option>
-        </select>
-        <button onclick="fetchData()">Get Data</button>
-    </div>
-    <div id="chart"></div>
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-10">
+        <h2>Dashboard</h2>
+        <div class="form-group">
+            <label for="time-period">Selecione o periodo:</label>
+            <select id="time-period" class="form-control">
+                <option value="24h">Ultimas 24 Horas</option>
+                <option value="48h">Ultimas 48 Horas</option>
+                <option value="1s">Ultima Semana</option>
+                <option value="1m">Ultimo mês</option>
+            </select>
+            <button class="btn btn-primary mt-2" onclick="fetchData()">Buscar</button>
+        </div>
+        <div id="chart" class="mt-4"></div>
 
-    <script>
-        function fetchData() {
-            const period = document.getElementById('time-period').value;
-            fetch(`/api/average/${period}`)
-                .then(response => response.json())
-                .then(data => {
-                    const equipmentIds = Object.keys(data);
-                    const values = Object.values(data);
-                    
-                    const trace = {
-                        x: equipmentIds,
-                        y: values,
-                        type: 'bar'
-                    };
-                    
-                    Plotly.newPlot('chart', [trace]);
-                });
-        }
-    </script>
-</body>
-</html>
+        <!-- Formulário de Upload de CSV -->
+        <div class="mt-5">
+            <h3>Upload de Arquivo CSV</h3>
+            <form id="upload-csv-form" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="csv-file">Selecione o arquivo CSV:</label>
+                    <input type="file" id="csv-file" name="file" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Enviar CSV</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div role="alert" id="liveToast" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false" style="position: absolute; top: 3.125rem; right: 2.5rem;">
+    <div class="toast-header">
+      <img src="..." class="rounded mr-2" alt="...">
+      <strong class="mr-auto" id="toast-title">Sucesso... ou não?</strong>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body" id="toast-body">
+      TESTE TESTE TESTE TESTE
+    </div>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    const apiKey = "{{ api_key }}";  // Acessa a chave da API passada pelo Flask
+    fetchData();
+
+    function fetchData() {
+        const period = document.getElementById('time-period').value;
+        fetch(`/api/average/${period}`, {
+            headers: {
+                'x-api-key': apiKey
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const equipmentIds = Object.keys(data);
+            const values = Object.values(data);
+            
+            const trace = {
+                x: equipmentIds,
+                y: values,
+                type: 'bar'
+            };
+            
+            Plotly.newPlot('chart', [trace]);
+        });
+    }
+
+    document.getElementById('upload-csv-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData();
+        const fileInput = document.getElementById('csv-file');
+        formData.append('file', fileInput.files[0]);
+
+        fetch('/upload_csv', {
+            method: 'POST',
+            headers: {
+                'x-api-key': apiKey
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                showToast('Erro', data.error, 'bg-danger text-white');
+            } else {
+                showToast('Sucesso', data.message, 'bg-success text-white');
+                fileInput.value = ''; // Clear the file input
+            }
+        })
+        .catch(error => {
+            showToast('Erro', `Erro ao enviar o arquivo CSV: ${error.message}`, 'bg-danger text-white');
+        });
+    });
+
+    function showToast(title, message, classes) {
+        const toastEl = document.getElementById('liveToast');
+        const toastTitle = document.getElementById('toast-title');
+        const toastBody = document.getElementById('toast-body');
+        
+        toastTitle.textContent = title;
+        toastBody.textContent = message;
+
+        toastEl.className = 'toast ' + classes;
+
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    }
+</script>
+{% endblock %}
