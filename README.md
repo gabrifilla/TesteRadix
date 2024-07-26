@@ -31,6 +31,7 @@
 
 ## Pré-requisitos
 :warning: [Python 3.12.4](https://www.python.org/downloads/release/python-3124/)
+:warning: [PostgreSQL 16.3](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
 
 ## Configuração
 
