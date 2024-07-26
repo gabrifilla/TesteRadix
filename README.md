@@ -36,6 +36,14 @@ Recebe as informações de usuário.
 ### `POST /sensor_data`
 Recebe as informações em tempo real.
 
+**Payload exemplo:**
+```json
+{
+  "equipmentId": "EQ-12495",
+  "timestamp": "2023-02-15T01:30:00.000-05:00",
+  "value": 78.42
+}
+
 ### `POST /upload_csv`
 Recebe o arquivo csv para preencher os dados.
 
@@ -57,11 +65,3 @@ Assim que tiver preenchido os campos, basta clicar em Start.
 
 ## Outros
 Dentro da pasta "outros", na raiz do projeto, adicionei o arquivo .csv com o formato que eu consegui fazer o código identificar. (tentei fazer com arquivos excel, mas não deu certo, não reconhecia de jeito nenhum, unico que funcionou foi o formato que está na pasta realmente)
-
-**Payload exemplo:**
-```json
-{
-  "equipmentId": "EQ-12495",
-  "timestamp": "2023-02-15T01:30:00.000-05:00",
-  "value": 78.42
-}

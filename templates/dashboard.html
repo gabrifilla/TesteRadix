@@ -2,31 +2,28 @@
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 <div class="row justify-content-center mt-5">
-    <div class="col-md-10">
+    <div class="col-md-12">
         <h2>Dashboard</h2>
-        <div class="form-group">
-            <label for="time-period">Selecione o periodo:</label>
-            <select id="time-period" class="form-control">
-                <option value="24h">Ultimas 24 Horas</option>
-                <option value="48h">Ultimas 48 Horas</option>
-                <option value="1s">Ultima Semana</option>
-                <option value="1m">Ultimo mês</option>
-            </select>
-            <button class="btn btn-primary mt-2" onclick="fetchData()">Buscar</button>
-        </div>
-        <div id="chart" class="mt-4"></div>
-
-        <!-- Formulário de Upload de CSV -->
-        <div class="mt-5">
-            <h3>Upload de Arquivo CSV</h3>
             <form id="upload-csv-form" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="csv-file">Selecione o arquivo CSV:</label>
-                    <input type="file" id="csv-file" name="file" class="form-control">
+                <div class="row">
+                    <div class="col-6">
+                        <label for="time-period">Selecione o periodo:</label>
+                        <select id="time-period" class="form-control">
+                            <option value="24h">Ultimas 24 Horas</option>
+                            <option value="48h">Ultimas 48 Horas</option>
+                            <option value="1s">Ultima Semana</option>
+                            <option value="1m">Ultimo mês</option>
+                        </select>
+                        <button class="btn btn-primary mt-2" onclick="fetchData()">Buscar</button>
+                    </div>
+                    <div class="col-6">
+                        <label for="csv-file">Selecione um arquivo .csv:</label>
+                        <input class="form-control" type="file" name="file" id="csv-file">
+                        <button type="submit" id="send-csv" class="btn btn-primary mt-2">Enviar CSV</button>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary mt-2">Enviar CSV</button>
             </form>
-        </div>
+        <div id="chart" class="mt-4 row"></div>
     </div>
 </div>
 
@@ -90,7 +87,7 @@
                 showToast('Erro', data.error, 'bg-danger text-white');
             } else {
                 showToast('Sucesso', data.message, 'bg-success text-white');
-                fileInput.value = ''; // Clear the file input
+                fileInput.value = '';
             }
         })
         .catch(error => {
